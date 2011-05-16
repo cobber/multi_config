@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use FindBin qw( $RealBin $Script );
-use lib "$RealBin/lib";
+use lib "$RealBin/../lib";
 use YAML;
 
 use UseCase::Config;
@@ -13,6 +13,10 @@ my $config_usecase = UseCase::Config->new();
 
 $config_usecase->run();
 
-printf "Configuration:\n%s\n", Multi::Config->sharedConfig()->dump( includeLocations => 1 );
+my $config = Multi::Config->sharedConfig();
+
+$config->setValueOf( foo => 'bar' );
+
+printf "Configuration:\n%s\n", $config->dump( includeLocations => 1 );
 
 exit( 0 );
