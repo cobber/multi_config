@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use YAML;
 
+my $sharedConfg = undef;
+
 sub new
     {
     my $class = shift;
@@ -22,6 +24,18 @@ sub new
     $self->{observers}      = {};     # <key> => [ <observer>, ... ]
 
     return( $self );
+    }
+
+sub sharedConfg
+    {
+    my $class = shift;
+
+    if( not $sharedConfg )
+        {
+        $sharedConfig = $class->new();
+        }
+
+    return $sharedConfig;
     }
 
 sub pushLayer
