@@ -48,19 +48,19 @@ sub sharedConfig {
     my $class = shift;
 
     if( not $sharedConfig ) {
-        $sharedConfig = $class->newSharedConfig();
+        $sharedConfig = $class->newConfig();
     }
 
     return $sharedConfig;
 }
 
 
-## @fn      newSharedConfig()
+## @fn      newConfig()
 #  @brief   create a new configuration object
 #  @warning do not use this method for normal operation - use sharedConfig() instead
 #  @param   <none>
 #  @return  a new configuration object
-sub newSharedConfig {
+sub newConfig {
     my $class = shift;
     my $self  = bless { @_ }, $class;
 
@@ -116,6 +116,11 @@ sub pushLayer {
 
     $self->{layerIndexForName}{$layerName}  = $layerIndex;
     $self->{currentLayerIndex}              = $layerIndex;
+
+    if( $loader )
+        {
+        $loader->load();
+        }
 
     return;
 }
@@ -473,8 +478,6 @@ sub dump {
 
             my $length = length $line->{$key};
 
-            printf "length %s: %d => '%s'\n", $key, $length, $line->{$key};
-
             next if ( $width->{$key} // 0 ) >= $length;
 
             $width->{$key} = $length;
@@ -492,10 +495,9 @@ sub dump {
 
     # create a common format for dumping the data, so that everything appears in neat columns
     my $format = join( ' ',
-        map { sprintf( "%%-%ds", $width->{$_} ) }
+        map { sprintf( "%%-%ds", $width->{$_} || 0 ) }
         @fields
     ) . "\n";
-    printf "format: %s\n", $format;
 
     # return a single string with the formatted data
     return(

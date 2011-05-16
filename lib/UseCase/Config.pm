@@ -7,8 +7,8 @@ use YAML;
 use File::Spec;
 use Multi::Config;
 use Multi::Config::Getopts;
-use Multi::Config::File::Yaml;
-use Multi::Config::File::Ini;
+# use Multi::Config::File::Yaml;
+# use Multi::Config::File::Ini;
 
 sub new
     {
@@ -21,33 +21,29 @@ sub new
 sub run
     {
     my $self = shift;
-    
-    $self->{config} = Multi::Config->shared_config();
 
-    $self->{Config}->pushLayer(
-        name     => 'runtime',
-        );
+    $self->{config} = Multi::Config->sharedConfig();
 
     $self->{config}->pushLayer(
-        name     => 'CLI',
-        importer => Multi::Config::Getopts->new(),
+        layerName => 'CLI',
+        loader    => Multi::Config::Getopts->new(),
         );
 
 #     $self->{config}->pushLayer(
-#         name     => 'User Config',
-#         importer => Multi::Config::File::Yaml->new(
+#         layerName => 'User Config',
+#         loader    => Multi::Config::File::Yaml->new(
 #             filename => catfile( $HOME, '.config_app', 'config.yaml' ),
 #             ),
 #         );
-# 
+#
 #     $self->{config}->pushLayer(
-#         name     => 'Factory Defaults',
-#         importer => Multi::Config::File::Ini->new(
+#         layerName => 'Factory Defaults',
+#         loader  => Multi::Config::File::Ini->new(
 #             filename => catfile( $RealBin, 'config', 'defaults.ini' ),
 #             ),
 #         );
 
-    $self->{config}->setCurrentLayer( 'runtime' );
+    $self->{config}->setCurrentLayer( layerName => 'runtime' );
     }
 
 1;
