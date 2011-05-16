@@ -31,7 +31,7 @@ sub load
     GetOpt::Long::Configure qw( require_order pass_through );
     GetOptions( $self->{parsedOptions}, @{$self->{optionSpec}} );
 
-    my $config = Config::Multi->shared
+    my $config = Config::Multi->sharedConfig();
 
     foreach my $key ( keys %{$self->{parsedOptions}} )
         {
